@@ -1,0 +1,125 @@
+openapi: "3.0.3"
+info:
+  title: Transactions Service
+  description: Service to manage transactions
+  version: 0.0.1
+
+tags:
+  - name: Transactions
+
+paths:
+  /transactions:
+    post:
+      tags:
+      - Transactions
+      summary: Create a transaction
+      operationId: createTransaction
+      requestBody:
+        description: Transaction
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          $ref: '#/components/responses/ok'
+        '400':
+          $ref: '#/components/responses/badRequest'
+
+  /transactions/iban/{account_iban}:
+    get:
+      tags:
+      - Transactions
+      summary: Search transactions
+      operationId: searchTransactions
+      parameters:
+        - $ref: '#/components/parameters/accountIban'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          $ref: '#/components/responses/listOfTransactions'
+        '400':
+          $ref: '#/components/responses/badRequest'
+
+components:
+
+  parameters:
+
+    accountIban:
+      name: account_iban
+      in: path
+      required: true
+      description: Account iban
+      schema:
+        type: string
+
+    sort:
+      name: sort
+      description: Sort
+      in: query
+      required: false
+      schema:
+        type: string
+
+  schemas:
+
+    ApiError:
+      type: object
+      properties:
+        code:
+          description: Code representing the type of error
+          type: integer
+      required:
+      - code
+
+    Transaction:
+      type: object
+      required:
+      - account_iban
+      - amount
+      properties:
+        reference:
+          type: string
+        account_iban:
+          type: string
+        date:
+          type: string
+          format: date-time
+        amount:
+          type: number
+          format: double
+        fee:
+          type: number
+          format: double
+          minimum: 0
+        description:
+          type: string
+
+  responses:
+
+    ok:
+      description: Success request
+
+    badRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+
+    transaction:
+      description: Transaction
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Transaction'
+
+    listOfTransactions:
+      description: List of transactions
+      content:
+        application/json; charset=UTF-8:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Transaction'
