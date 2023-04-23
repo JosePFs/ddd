@@ -1,15 +1,6 @@
 ## Summary
 
-Since I don't have much time to carry out the practical case, and given my PC configuration, the Java version is 11 and the configuration is done through Maven.
-
-To shorten delivery time, some classes do not have unit test.
-
-Also return by state use cases are also yet to be implemented. If necessary, I would fill them in without problem, but I summarize the idea of how they would be:
-
-Being REST I would like that endpoints to be Restful /transactions/channel/{channel} style. In this way they could separate endpoints and use cases, which would facilitate security and reinforce single responsibility (SRP), as each could change due to different actors.
-Because of this, even if the single endpoint approach was followed as stated in the requirement, it would separate the use cases even if some parts were reused through strategies, transformers, etc.
-
-Project uses a REST service API First approach and is structured following DDD with the following modules:
+Project follows a REST service API First approach and is structured following DDD with the following modules:
 * Domain: contains the entities, value objects and interfaces that make up the project.
 * Application: in which the use cases reside.
 * Repository: where is the persistence implementation. For simplicity, H2 in memory.
